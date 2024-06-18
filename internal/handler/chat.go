@@ -1,6 +1,11 @@
 package handler
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
+	"net/http"
+	"warunggpt-core-service/config"
 	"warunggpt-core-service/internal/model"
 	"warunggpt-core-service/internal/service"
 
@@ -9,10 +14,11 @@ import (
 
 type ChatHandler struct {
 	chatService service.ChatService
+	config      *config.Config
 }
 
-func NewChatHandler(chatService service.ChatService) *ChatHandler {
-	return &ChatHandler{chatService: chatService}
+func NewChatHandler(chatService service.ChatService, config *config.Config) *ChatHandler {
+	return &ChatHandler{chatService: chatService, config: config}
 }
 
 func (h *ChatHandler) GetChatsBySession(c echo.Context) error {
@@ -30,8 +36,60 @@ func (h *ChatHandler) CreateChat(c echo.Context) error {
 		return ResponseBuilderInstance.InvalidRequest(c)
 	}
 
+	agentPayload := struct {
+		Message string `json:"message"`
+	}{
+		Message: chat.Message,
+	}
+
+	marshalAgentPayload, err := json.Marshal(agentPayload)
+	if err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
+	agentApiUrl := h.config.AGENT_API_URL + "/chat"
+
+	agentResponse, err := http.Post(agentApiUrl, "application/json", bytes.NewBuffer(marshalAgentPayload))
+	if err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+	defer agentResponse.Body.Close()
+
+	agentResponseBody, err := io.ReadAll(agentResponse.Body)
+	if err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
+	type AgentResponseDto struct {
+		Status  int    `json:"status"`
+		Message string `json:"message"`
+		Data    struct {
+			Message string `json:"message"`
+		} `json:"data"`
+	}
+
+	var agentApiResponse AgentResponseDto
+	if err := json.Unmarshal(agentResponseBody, &agentApiResponse); err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
+	if agentApiResponse.Status != 200 {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
+	agentResponseChatData := model.ChatModel{
+		Session: chat.Session,
+		Message: agentApiResponse.Data.Message,
+		Role:    "model",
+	}
+
 	if err := h.chatService.CreateChat(chat); err != nil {
 		return ResponseBuilderInstance.InternalServiceError(c)
 	}
+
+	if err := h.chatService.CreateChat(agentResponseChatData); err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
 	return ResponseBuilderInstance.Success(c, chat)
 }

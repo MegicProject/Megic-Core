@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"warunggpt-core-service/internal/service"
 
 	"github.com/labstack/echo/v4"
@@ -16,14 +15,13 @@ func NewSessionHandler(sessionService service.SessionService) *SessionHandler {
 }
 
 type CreateSessionResponseDto struct {
-	session string
+	Session string `json:"session"`
 }
 
 func (h *SessionHandler) CreateSession(c echo.Context) error {
 	session := h.service.CreateSession()
-	fmt.Println(session)
 	response := CreateSessionResponseDto{
-		session: session,
+		Session: session,
 	}
 	return ResponseBuilderInstance.Success(c, response)
 }

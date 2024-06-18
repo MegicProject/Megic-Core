@@ -19,7 +19,7 @@ func main() {
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
-	router.AppRoutes(e, db.GetDB())
+	router.AppRoutes(e, db.GetDB(), cfg)
 
 	port := ":8081"
 	e.Logger.Fatal(e.Start(port))

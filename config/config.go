@@ -6,7 +6,8 @@ import (
 )
 
 type Config struct {
-	DB *DBConfig
+	DB            *DBConfig
+	AGENT_API_URL string
 }
 
 type DBConfig struct {
@@ -26,6 +27,7 @@ func LoadConfig() *Config {
 			Port:     os.Getenv("DB_PORT"),
 			Name:     os.Getenv("DB_NAME"),
 		},
+		AGENT_API_URL: os.Getenv("AGENT_API_URL"),
 	}
 }
 

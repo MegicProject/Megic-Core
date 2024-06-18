@@ -2,6 +2,7 @@ package router
 
 import (
 	"database/sql"
+	"warunggpt-core-service/config"
 	"warunggpt-core-service/internal/handler"
 	"warunggpt-core-service/internal/repository"
 	"warunggpt-core-service/internal/service"
@@ -9,13 +10,13 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-func AppRoutes(e *echo.Echo, db *sql.DB) {
+func AppRoutes(e *echo.Echo, db *sql.DB, cfg *config.Config) {
 	chatRepository := repository.NewChatRepository(db)
 	chatService := service.NewChatService(chatRepository)
-	chatHandler := handler.NewChatHandler(chatService)
+	chatHandler := handler.NewChatHandler(chatService, cfg)
 	sessionService := service.NewSessionService()
 	sessionHandler := handler.NewSessionHandler(sessionService)
-	e.GET("/chats/:session", chatHandler.GetChatsBySession)
 	e.POST("/chats", chatHandler.CreateChat)
+	e.GET("/chats/:session", chatHandler.GetChatsBySession)
 	e.POST("/sessions", sessionHandler.CreateSession)
 }
