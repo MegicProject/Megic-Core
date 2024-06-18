@@ -1,23 +1,34 @@
 package db
 
 import (
+	"database/sql"
 	"log"
 	"warunggpt-core-service/config"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/jmoiron/sqlx"
 )
 
-var db *sqlx.DB
+var db *sql.DB
 
 func InitDB(cfg *config.Config) {
+	dsn := cfg.DB.DataSourceName()
+
 	var err error
-	db, err = sqlx.Connect("mysql", cfg.DB.DataSourceName())
+	db, err = sql.Open("mysql", dsn)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("Error opening database connection: %v", err)
 	}
+
+	if err := db.Ping(); err != nil {
+		log.Fatalf("Error pinging database: %v", err)
+	}
+
+	log.Println("Database connected!")
+
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(100)
 }
 
-func GetDB() *sqlx.DB {
+func GetDB() *sql.DB {
 	return db
 }

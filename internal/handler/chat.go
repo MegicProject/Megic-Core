@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"net/http"
 	"warunggpt-core-service/internal/model"
 	"warunggpt-core-service/internal/service"
 
@@ -20,19 +19,19 @@ func (h *ChatHandler) GetChatsBySession(c echo.Context) error {
 	session := c.Param("session")
 	chats, err := h.chatService.GetChatsBySession(session)
 	if err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		return ResponseBuilderInstance.InternalServiceError(c)
 	}
-	return c.JSON(http.StatusOK, chats)
+	return ResponseBuilderInstance.Success(c, chats)
 }
 
 func (h *ChatHandler) CreateChat(c echo.Context) error {
 	var chat model.ChatModel
 	if err := c.Bind(&chat); err != nil {
-		return c.JSON(http.StatusBadRequest, err)
+		return ResponseBuilderInstance.InvalidRequest(c)
 	}
 
 	if err := h.chatService.CreateChat(chat); err != nil {
-		return c.JSON(http.StatusInternalServerError, err)
+		return ResponseBuilderInstance.InternalServiceError(c)
 	}
-	return c.JSON(http.StatusCreated, chat)
+	return ResponseBuilderInstance.Success(c, chat)
 }

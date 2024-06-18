@@ -10,10 +10,12 @@ import (
 )
 
 func AppRoutes(e *echo.Echo, db *sql.DB) {
-	// Chat routes
 	chatRepository := repository.NewChatRepository(db)
 	chatService := service.NewChatService(chatRepository)
 	chatHandler := handler.NewChatHandler(chatService)
+	sessionService := service.NewSessionService()
+	sessionHandler := handler.NewSessionHandler(sessionService)
 	e.GET("/chats/:session", chatHandler.GetChatsBySession)
 	e.POST("/chats", chatHandler.CreateChat)
+	e.POST("/sessions", sessionHandler.CreateSession)
 }

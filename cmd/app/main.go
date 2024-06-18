@@ -12,13 +12,15 @@ import (
 func main() {
 	cfg := config.LoadConfig()
 	db.InitDB(cfg)
+
 	e := echo.New()
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.Recover())
 	e.Use(middleware.CORS())
 
-	router.AppRoutes(e, db.GetDB().DB)
+	router.AppRoutes(e, db.GetDB())
 
-	e.Logger.Fatal(e.Start(":8080"))
+	port := ":8081"
+	e.Logger.Fatal(e.Start(port))
 }
