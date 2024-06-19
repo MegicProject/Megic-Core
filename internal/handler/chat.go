@@ -13,12 +13,13 @@ import (
 )
 
 type ChatHandler struct {
-	chatService service.ChatService
-	config      *config.Config
+	chatService          service.ChatService
+	config               *config.Config
+	configurationService service.ConfigurationService
 }
 
-func NewChatHandler(chatService service.ChatService, config *config.Config) *ChatHandler {
-	return &ChatHandler{chatService: chatService, config: config}
+func NewChatHandler(chatService service.ChatService, config *config.Config, configurationService service.ConfigurationService) *ChatHandler {
+	return &ChatHandler{chatService: chatService, config: config, configurationService: configurationService}
 }
 
 func (h *ChatHandler) GetChatsBySession(c echo.Context) error {
@@ -36,10 +37,29 @@ func (h *ChatHandler) CreateChat(c echo.Context) error {
 		return ResponseBuilderInstance.InvalidRequest(c)
 	}
 
+	instructionConfig, err := h.configurationService.GetByCode("AGENT_INSTRUCTION")
+	if err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
+	historyConfig, err := h.configurationService.GetByCode("AGENT_HISTORY")
+	if err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
+	var history []model.HistoryItem
+	if err := json.Unmarshal([]byte(historyConfig.Value), &history); err != nil {
+		return ResponseBuilderInstance.InternalServiceError(c)
+	}
+
 	agentPayload := struct {
-		Message string `json:"message"`
+		Message     string              `json:"message"`
+		Instruction string              `json:"instruction"`
+		History     []model.HistoryItem `json:"history"`
 	}{
-		Message: chat.Message,
+		Message:     chat.Message,
+		Instruction: instructionConfig.Value,
+		History:     history,
 	}
 
 	marshalAgentPayload, err := json.Marshal(agentPayload)

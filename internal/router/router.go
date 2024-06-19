@@ -12,8 +12,9 @@ import (
 
 func AppRoutes(e *echo.Echo, db *sql.DB, cfg *config.Config) {
 	chatRepository := repository.NewChatRepository(db)
+	configurationRepository := repository.NewConfigurationRepository(db)
 	chatService := service.NewChatService(chatRepository)
-	chatHandler := handler.NewChatHandler(chatService, cfg)
+	chatHandler := handler.NewChatHandler(chatService, cfg, configurationRepository)
 	sessionService := service.NewSessionService()
 	sessionHandler := handler.NewSessionHandler(sessionService)
 	e.POST("/chats", chatHandler.CreateChat)
