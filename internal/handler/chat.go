@@ -1,13 +1,13 @@
 package handler
 
 import (
+	"Megic-core/config"
+	"Megic-core/internal/model"
+	"Megic-core/internal/service"
 	"bytes"
 	"encoding/json"
 	"io"
 	"net/http"
-	"warunggpt-core-service/config"
-	"warunggpt-core-service/internal/model"
-	"warunggpt-core-service/internal/service"
 
 	"github.com/labstack/echo/v4"
 )

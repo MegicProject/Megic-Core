@@ -1,4 +1,4 @@
-module warunggpt-core-service
+module Megic-core
 
 go 1.22.4
 

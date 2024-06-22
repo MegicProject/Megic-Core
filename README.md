@@ -1,6 +1,4 @@
-# WarungGPT-Core
-
-WarungGPT-Core is a REST API project built using Go Echo framework for managing chat functionalities.
+# Megic-Core
 
 ## Table of Contents
 
@@ -24,7 +22,7 @@ Before running the application, make sure you have the following environment var
 
 ## Getting Started
 
-Follow these steps to set up and run the WarungGPT-Core application:
+Follow these steps to set up and run the Megic-Core application:
 
 ### Installation
 
@@ -32,7 +30,7 @@ Follow these steps to set up and run the WarungGPT-Core application:
 
    ```bash
    git clone <repository_url>
-   cd WarungGPT-Core
+   cd Megic-core
    ```
 
 2. **Set up environment variables:**
@@ -58,7 +56,7 @@ Follow these steps to set up and run the WarungGPT-Core application:
 
 ### Running the Application
 
-To run the WarungGPT-Core application locally:
+To run the Megic-Core application locally:
 
 ```bash
 go run main.go

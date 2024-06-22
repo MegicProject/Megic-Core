@@ -1,11 +1,11 @@
 package router
 
 import (
+	"Megic-core/config"
+	"Megic-core/internal/handler"
+	"Megic-core/internal/repository"
+	"Megic-core/internal/service"
 	"database/sql"
-	"warunggpt-core-service/config"
-	"warunggpt-core-service/internal/handler"
-	"warunggpt-core-service/internal/repository"
-	"warunggpt-core-service/internal/service"
 
 	"github.com/labstack/echo/v4"
 )

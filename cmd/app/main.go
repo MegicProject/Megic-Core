@@ -1,9 +1,9 @@
 package main
 
 import (
-	"warunggpt-core-service/config"
-	"warunggpt-core-service/internal/db"
-	"warunggpt-core-service/internal/router"
+	"Megic-core/config"
+	"Megic-core/internal/db"
+	"Megic-core/internal/router"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"

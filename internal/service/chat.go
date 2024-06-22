@@ -1,8 +1,8 @@
 package service
 
 import (
-	"warunggpt-core-service/internal/model"
-	"warunggpt-core-service/internal/repository"
+	"Megic-core/internal/model"
+	"Megic-core/internal/repository"
 )
 
 type ChatService interface {

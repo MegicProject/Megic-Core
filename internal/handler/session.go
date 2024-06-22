@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"warunggpt-core-service/internal/service"
+	"Megic-core/internal/service"
 
 	"github.com/labstack/echo/v4"
 )

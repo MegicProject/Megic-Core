@@ -1,8 +1,8 @@
 package repository
 
 import (
+	"Megic-core/internal/model"
 	"database/sql"
-	"warunggpt-core-service/internal/model"
 )
 
 type ConfigurationRepository interface {

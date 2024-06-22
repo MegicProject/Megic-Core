@@ -1,9 +1,9 @@
 package db
 
 import (
+	"Megic-core/config"
 	"database/sql"
 	"log"
-	"warunggpt-core-service/config"
 
 	_ "github.com/go-sql-driver/mysql"
 )
