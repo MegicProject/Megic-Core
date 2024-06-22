@@ -29,7 +29,7 @@ Follow these steps to set up and run the Megic-Core application:
 1. **Clone the repository:**
 
    ```bash
-   git clone <repository_url>
+   git clone github.com/talentafigan/Megic-core.git
    cd Megic-core
    ```
 
