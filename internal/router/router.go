@@ -17,7 +17,7 @@ func AppRoutes(e *echo.Echo, db *sql.DB, cfg *config.Config) {
 	chatHandler := handler.NewChatHandler(chatService, cfg, configurationRepository)
 	sessionService := service.NewSessionService()
 	sessionHandler := handler.NewSessionHandler(sessionService)
-	e.POST("/chats", chatHandler.CreateChat)
-	e.GET("/chats/:session", chatHandler.GetChatsBySession)
-	e.POST("/sessions", sessionHandler.CreateSession)
+	e.POST("/api/chats", chatHandler.CreateChat)
+	e.GET("/api/chats/:session", chatHandler.GetChatsBySession)
+	e.POST("/api/sessions", sessionHandler.CreateSession)
 }
