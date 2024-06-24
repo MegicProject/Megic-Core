@@ -1,8 +1,8 @@
 package model
 
 type ConfigurationModel struct {
-	Code  string `db:"code" json:"code"`
-	Value string `db:"value" json:"value"`
+	Code  string `db:"CODE" json:"code"`
+	Value string `db:"VALUE" json:"value"`
 }
 
 type HistoryPart struct {

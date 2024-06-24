@@ -38,7 +38,7 @@ func (r *chatRepository) Get(session string) ([]model.ChatModel, error) {
 		return nil, err
 	}
 
-	return chats, nil
+	return chats, err
 }
 
 func (r *chatRepository) Create(chat model.ChatModel) error {

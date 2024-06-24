@@ -13,11 +13,10 @@ import (
 func AppRoutes(e *echo.Echo, db *sql.DB, cfg *config.Config) {
 	chatRepository := repository.NewChatRepository(db)
 	configurationRepository := repository.NewConfigurationRepository(db)
-	chatService := service.NewChatService(chatRepository)
-	chatHandler := handler.NewChatHandler(chatService, cfg, configurationRepository)
 	sessionService := service.NewSessionService()
-	sessionHandler := handler.NewSessionHandler(sessionService)
+	chatService := service.NewChatService(chatRepository, configurationRepository, config.LoadConfig().AGENT_API_URL)
+	chatHandler := handler.NewChatHandler(chatService, sessionService, cfg)
 	e.POST("/api/chats", chatHandler.CreateChat)
+	e.POST("/api/chats/session", chatHandler.CreateSession)
 	e.GET("/api/chats/:session", chatHandler.GetChatsBySession)
-	e.POST("/api/sessions", sessionHandler.CreateSession)
 }

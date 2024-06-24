@@ -14,10 +14,14 @@ type Response struct {
 
 type ResponseBuilder struct{}
 
-func (rb *ResponseBuilder) Success(c echo.Context, data interface{}) error {
+func (rb *ResponseBuilder) Success(c echo.Context, data interface{}, message string) error {
+	respMessage := "Success"
+	if message != "" {
+		respMessage = message
+	}
 	response := Response{
 		Status:  http.StatusOK,
-		Message: "Success",
+		Message: respMessage,
 		Data:    data,
 	}
 	return c.JSON(http.StatusOK, response)
@@ -39,5 +43,4 @@ func (rb *ResponseBuilder) InternalServiceError(c echo.Context) error {
 	return c.JSON(http.StatusInternalServerError, response)
 }
 
-// Create an instance of ResponseBuilder
 var ResponseBuilderInstance = &ResponseBuilder{}
